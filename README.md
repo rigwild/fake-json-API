@@ -6,7 +6,7 @@ Easily test your scripts with JSON files.  No dependencies required. CORS header
 ## Install
 Clone the repository :
 
-  $ git clone https://github.com/rigwild/fake-json-API/
+    $ git clone https://github.com/rigwild/fake-json-API/
 
 There's no dependencies.
 
