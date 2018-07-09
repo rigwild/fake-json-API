@@ -23,9 +23,6 @@ const routes = [
     file: 'profile_PATCH.json'
   }
 ]
-.map(route => {
-  route.file = jsonFilesDir + route.file
-  return route
-})
+.map(route => Object.assign(route, { file: jsonFilesDir + route.file }))
 
 module.exports = routes
