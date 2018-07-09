@@ -15,21 +15,21 @@ You can specify the URL, the HTTP method and the call output data file in the `.
 
 Route configuration example :
 
-  const routes = [
-    {
-      url: '/login',
-      method: 'POST',
-      file: 'login_POST.json'
-    }
-  ]
+    const routes = [
+      {
+        url: '/login',
+        method: 'POST',
+        file: 'login_POST.json'
+      }
+    ]
 
 Then simply create the `./json/login_POST.json` file.
 
-  {
-    "id": 204,
+    {
+      "id": 204,
       "username": "rigwild",
       "message": "Login successful."
-  }
+    }
   
 ## Start
 
