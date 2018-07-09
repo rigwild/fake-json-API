@@ -1,11 +1,8 @@
+'use strict'
+
 const http = require('http')
 const fs = require('fs')
-
-const jsonFilesDir = './json/'
-const routes = [
-  { url: '/', method: 'GET', file: jsonFilesDir + 'root_GET.json' },
-  { url: '/login', method: 'POST', file: jsonFilesDir + 'login_POST.json' }
-]
+const routes = require('./routes')
 
 const requestExists = (url, method) => {
   let temp
@@ -34,11 +31,18 @@ http.createServer((req, res) => {
     'Content-Type': 'application/json'
   });
 
-  let file, data
-  if ((file = requestExists(url, method))) data = getFileContent(file)
-  else data = {message: 'This route is not defined.'}
-
-  res.write(JSON.stringify(data))
+  if (url === '/' && method === 'GET')
+    res.write(JSON.stringify({
+        message: "Fake JSON API is working.",
+        github: "https://github.com/rigwild/fake-json-API",
+        routes
+    }))
+  else {
+    let file, data
+    if ((file = requestExists(url, method))) data = getFileContent(file)
+    else data = {message: 'This route is not defined.'}
+    res.write(JSON.stringify(data))
+  }
   res.end()
 }).listen(44687)
 

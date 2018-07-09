@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/rigwild/fake-json-API/issues"
   },
-  "homepage": "https://github.com/rigwild/fake-json-API#readme"
+  "homepage": "https://github.com/rigwild/fake-json-API#readme",
+  "dependencies": {}
 }
