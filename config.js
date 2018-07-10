@@ -1,6 +1,7 @@
 'use strict'
 
 const jsonFilesDir = './json/'
+const JSONprettyPrint = true
 const routes = [
   {
     url: '/login',
@@ -29,4 +30,4 @@ const routes = [
 ]
 .map(route => Object.assign(route, { file: jsonFilesDir + route.file }))
 
-module.exports = routes
+module.exports = {JSONprettyPrint, routes}

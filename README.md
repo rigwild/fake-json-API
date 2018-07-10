@@ -9,8 +9,9 @@ Clone the repository :
 
 There's no dependencies.
 
-Add your routes in the `./routes.js` file.
+Add your routes in the `./config.js` file.
 You can specify the URL, the HTTP method, the HTTP code and the call output data file in the `./json/` directory.
+You can choose to pretty print the JSON by modifying the value of `JSONprettyPrint`.
 
 Route configuration example :
 

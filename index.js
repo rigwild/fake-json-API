@@ -2,11 +2,13 @@
 
 const http = require('http')
 const fs = require('fs')
-const routes = require('./routes')
+const config = require('./config')
+
+const prettyPrintSettings = () => config.JSONprettyPrint ? 2 : 0
 
 const requestExists = (url, method) => {
   let temp
-  if ((temp = routes.find(route => (route.url === url && route.method === method))))
+  if ((temp = config.routes.find(route => (route.url === url && route.method === method))))
     return temp
   return undefined
 }
@@ -23,13 +25,13 @@ const sendDefaultMessage = (res, routes) => {
     message: "Fake JSON API is working.",
     github: "https://github.com/rigwild/fake-json-API",
     routes
-  }))
+  }, null, prettyPrintSettings()))
   res.end()
 }
 
 const sendError = (res, errorMsg) => {
   res.statusCode = 200
-  res.write(JSON.stringify({ message: (errorMsg && typeof errorMsg === 'string') ? errorMsg : 'Unknown server error.' }))
+  res.write(JSON.stringify({ message: (errorMsg && typeof errorMsg === 'string') ? errorMsg : 'Unknown server error.' }, null, prettyPrintSettings()))
   res.end()
 }
 
@@ -45,12 +47,12 @@ http.createServer((req, res) => {
   console.log(method, url)
   res.setHeader('Content-Type', 'application/json')
 
-  if (url === '/' && method === 'GET') sendDefaultMessage(res, routes)
+  if (url === '/' && method === 'GET') sendDefaultMessage(res, config.routes)
   else {
     let aRoute
     if ((aRoute = requestExists(url, method))) {
       getFileContent(aRoute.file)
-        .then(result => JSON.stringify(result))
+        .then(result => JSON.stringify(result, null, prettyPrintSettings()))
         .then(result => {
           res.statusCode = aRoute.httpCode
           res.write(result)
