@@ -11,15 +11,26 @@ const requestExists = (url, method) => {
   return undefined
 }
 
-const getFileContent = file => {
-  let data
-  try {
-    data = JSON.parse(fs.readFileSync(file, 'utf8'))
-  } catch (e) {
-    data = undefined
-    console.error(e)
-  }
-  return data
+const getFileContent = file =>
+  new Promise((resolve, reject) => {
+    try { fs.readFile(file, 'utf8', (err, data) => resolve(JSON.parse(data))) }
+    catch (e) { reject(e) }
+  })
+
+const sendDefaultMessage = (res, routes) => {
+  res.statusCode = 200
+  res.write(JSON.stringify({
+    message: "Fake JSON API is working.",
+    github: "https://github.com/rigwild/fake-json-API",
+    routes
+  }))
+  res.end()
+}
+
+const sendError = res => {
+  res.statusCode = 200
+  res.write(JSON.stringify({ message: 'This route is not defined.' }))
+  res.end()
 }
 
 http.createServer((req, res) => {
@@ -29,22 +40,24 @@ http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Content-Type', 'application/json')
 
-  if (url === '/' && method === 'GET')
-    res.write(JSON.stringify({
-        message: "Fake JSON API is working.",
-        github: "https://github.com/rigwild/fake-json-API",
-        routes
-    }))
+  if (url === '/' && method === 'GET') sendDefaultMessage(res, routes)
   else {
-    let aRoute, data
+    let aRoute
     if ((aRoute = requestExists(url, method))) {
-      res.statusCode = aRoute.httpCode
-      data = getFileContent(aRoute.file)
+      getFileContent(aRoute.file)
+        .then(result => JSON.stringify(result))
+        .then(result => {
+          res.statusCode = aRoute.httpCode
+          res.write(result)
+          res.end()
+        })
+        .catch(err => {
+          console.error(err)
+          sendError(res)
+        })
     }
-    else data = {message: 'This route is not defined.'}
-    res.write(JSON.stringify(data))
+    else sendError(res)
   }
-  res.end()
 }).listen(44687)
 
 console.log('Server is listening on http://127.0.0.1:44687/ ...')
