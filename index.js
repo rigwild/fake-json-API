@@ -27,17 +27,22 @@ const sendDefaultMessage = (res, routes) => {
   res.end()
 }
 
-const sendError = res => {
+const sendError = (res, errorMsg) => {
   res.statusCode = 200
-  res.write(JSON.stringify({ message: 'This route is not defined.' }))
+  res.write(JSON.stringify({ message: (errorMsg && typeof errorMsg === 'string') ? errorMsg : 'Unknown server error.' }))
   res.end()
 }
 
 http.createServer((req, res) => {
   const { url, method } = req
-  console.log(method, url)
-
   res.setHeader('Access-Control-Allow-Origin', '*')
+
+  if (url === '/favicon.ico' && method === 'GET') {
+    res.end()
+    return
+  }
+
+  console.log(method, url)
   res.setHeader('Content-Type', 'application/json')
 
   if (url === '/' && method === 'GET') sendDefaultMessage(res, routes)
@@ -56,7 +61,7 @@ http.createServer((req, res) => {
           sendError(res)
         })
     }
-    else sendError(res)
+    else sendError(res, 'This route is not defined.')
   }
 }).listen(44687)
 
