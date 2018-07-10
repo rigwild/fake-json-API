@@ -1,4 +1,3 @@
-
 # fake-json-API
 
 Easily test your scripts with JSON files.  No dependencies required. CORS header is set to avoid using proxies like cors-anywhere. 
@@ -11,7 +10,7 @@ Clone the repository :
 There's no dependencies.
 
 Add your routes in the `./routes.js` file.
-You can specify the URL, the HTTP method and the call output data file in the `./json/` directory.
+You can specify the URL, the HTTP method, the HTTP code and the call output data file in the `./json/` directory.
 
 Route configuration example :
 
@@ -19,7 +18,8 @@ Route configuration example :
       {
         url: '/login',
         method: 'POST',
-        file: 'login_POST.json'
+        file: 'login_POST.json',
+        httpCode: 200
       }
     ]
 

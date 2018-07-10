@@ -7,7 +7,7 @@ const routes = require('./routes')
 const requestExists = (url, method) => {
   let temp
   if ((temp = routes.find(route => (route.url === url && route.method === method))))
-    return temp.file
+    return temp
   return undefined
 }
 
@@ -26,10 +26,8 @@ http.createServer((req, res) => {
   const { url, method } = req
   console.log(method, url)
 
-  res.writeHead(200, {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json'
-  });
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Content-Type', 'application/json')
 
   if (url === '/' && method === 'GET')
     res.write(JSON.stringify({
@@ -38,8 +36,11 @@ http.createServer((req, res) => {
         routes
     }))
   else {
-    let file, data
-    if ((file = requestExists(url, method))) data = getFileContent(file)
+    let aRoute, data
+    if ((aRoute = requestExists(url, method))) {
+      res.statusCode = aRoute.httpCode
+      data = getFileContent(aRoute.file)
+    }
     else data = {message: 'This route is not defined.'}
     res.write(JSON.stringify(data))
   }
