@@ -39,8 +39,5 @@ Then simply create the `./json/login_POST.json` file.
 The server starts to listen on port 44687.
 The configured routes are listed at the root of the API.
 
-## Demo
-A working demo is available here : [https://fake-json-api.now.sh/](https://fake-json-api.now.sh/)
-
 ## License
 [The MIT license](https://github.com/rigwild/fake-json-API/blob/master/LICENSE).
